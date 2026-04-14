@@ -1,0 +1,34 @@
+{
+    "name": "Beitragsanalyse",
+    "icon": "fa-chart-bar",
+    "version": "1.0.0",
+    "author": "Pascal Christmann",
+    "authorEmail": "",
+    "website": "",
+    "minAdmidioVersion": "5.1.0",
+    "maxAdmidioVersion": "",
+    "description": "PLG_BEITRAGSANALYSE_DESCRIPTION",
+    "type": "default",
+    "defaultConfig": {
+        "beitragsanalyse_enabled": {
+            "type": "integer",
+            "value": 1
+        },
+        "beitragsanalyse_roles_view_plugin": {
+            "type": "array",
+            "value": ["All"]
+        },
+        "beitragsanalyse_category_sparten": {
+            "type": "integer",
+            "value": 0
+        },
+        "beitragsanalyse_category_family": {
+            "type": "integer",
+            "value": 0
+        },
+        "beitragsanalyse_field_beitrag": {
+            "type": "integer",
+            "value": 0
+        }
+    }
+}
