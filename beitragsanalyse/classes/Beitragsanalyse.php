@@ -226,12 +226,13 @@ class Beitragsanalyse extends PluginAbstract
         $userNames = [];    // userId => ['first' => ..., 'last' => ...]
 
         if (!empty($allUserIds)) {
-            // Resolve field IDs first — MySQL rejects LIMIT in scalar subqueries inside JOIN ON.
+            // Resolve FIRST_NAME / LAST_NAME field IDs.
             $firstNameFieldId = 0;
             $lastNameFieldId  = 0;
-            $sql  = "SELECT usf_id, usf_name_intern FROM " . TBL_USER_FIELDS
-                  . " WHERE usf_name_intern IN ('FIRST_NAME', 'LAST_NAME')";
-            $stmt = $gDb->queryPrepared($sql);
+            $sql  = 'SELECT usf_id, usf_name_intern
+                       FROM ' . TBL_USER_FIELDS . "
+                      WHERE usf_name_intern IN ('FIRST_NAME', 'LAST_NAME')";
+            $stmt = $gDb->queryPrepared($sql, []);
             while ($row = $stmt->fetch()) {
                 if ($row['usf_name_intern'] === 'FIRST_NAME') {
                     $firstNameFieldId = (int)$row['usf_id'];
@@ -240,24 +241,22 @@ class Beitragsanalyse extends PluginAbstract
                 }
             }
 
-            $placeholders = implode(',', array_fill(0, count($allUserIds), '?'));
-            $sql = 'SELECT u.usr_id,
-                           fn.usd_value AS first_name,
-                           ln.usd_value AS last_name
-                      FROM ' . TBL_USERS . ' u
-                 LEFT JOIN ' . TBL_USER_DATA . ' fn
-                        ON fn.usd_usr_id = u.usr_id
-                       AND fn.usd_usf_id = ' . $firstNameFieldId . '
-                 LEFT JOIN ' . TBL_USER_DATA . ' ln
-                        ON ln.usd_usr_id = u.usr_id
-                       AND ln.usd_usf_id = ' . $lastNameFieldId . '
-                     WHERE u.usr_id IN (' . $placeholders . ')';
-            $stmt = $gDb->queryPrepared($sql, $allUserIds);
+            // Use array_values() to guarantee sequential keys for PDO positional params.
+            $userIdList   = array_values($allUserIds);
+            $placeholders = implode(',', array_fill(0, count($userIdList), '?'));
+            $sql = 'SELECT usd_usr_id, usd_value
+                      FROM ' . TBL_USER_DATA . '
+                     WHERE usd_usf_id = ?
+                       AND usd_usr_id IN (' . $placeholders . ')';
+
+            $stmt = $gDb->queryPrepared($sql, array_merge([$firstNameFieldId], $userIdList));
             while ($row = $stmt->fetch()) {
-                $userNames[(int)$row['usr_id']] = [
-                    'first' => $row['first_name'] ?? '',
-                    'last'  => $row['last_name']  ?? '',
-                ];
+                $userNames[(int)$row['usd_usr_id']]['first'] = $row['usd_value'] ?? '';
+            }
+
+            $stmt = $gDb->queryPrepared($sql, array_merge([$lastNameFieldId], $userIdList));
+            while ($row = $stmt->fetch()) {
+                $userNames[(int)$row['usd_usr_id']]['last'] = $row['usd_value'] ?? '';
             }
         }
 
