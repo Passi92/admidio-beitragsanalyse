@@ -79,11 +79,9 @@ class BeitragsanalysePreferencesPresenter
             'beitragsanalyse_category_sparten',
             $gL10n->get('PLG_BEITRAGSANALYSE_CATEGORY_SPARTEN'),
             $gDb,
-            'SELECT cat_id, cat_name
-               FROM ' . TBL_CATEGORIES . '
-              WHERE cat_type   = \'ROL\'
-                AND cat_org_id = ' . $gCurrentOrgId . '
-           ORDER BY cat_name',
+            ['query'  => 'SELECT cat_id, cat_name FROM ' . TBL_CATEGORIES . '
+                           WHERE cat_type = ? AND cat_org_id = ? ORDER BY cat_name',
+             'params' => ['ROL', $gCurrentOrgId]],
             [
                 'defaultValue'                  => $formValues['beitragsanalyse_category_sparten']['value'],
                 'showContextDependentFirstEntry' => true,
@@ -96,11 +94,9 @@ class BeitragsanalysePreferencesPresenter
             'beitragsanalyse_category_family',
             $gL10n->get('PLG_BEITRAGSANALYSE_CATEGORY_FAMILY'),
             $gDb,
-            'SELECT cat_id, cat_name
-               FROM ' . TBL_CATEGORIES . '
-              WHERE cat_type   = \'ROL\'
-                AND cat_org_id = ' . $gCurrentOrgId . '
-           ORDER BY cat_name',
+            ['query'  => 'SELECT cat_id, cat_name FROM ' . TBL_CATEGORIES . '
+                           WHERE cat_type = ? AND cat_org_id = ? ORDER BY cat_name',
+             'params' => ['ROL', $gCurrentOrgId]],
             [
                 'defaultValue'                  => $formValues['beitragsanalyse_category_family']['value'],
                 'showContextDependentFirstEntry' => true,
@@ -113,10 +109,9 @@ class BeitragsanalysePreferencesPresenter
             'beitragsanalyse_field_beitrag',
             $gL10n->get('PLG_BEITRAGSANALYSE_FIELD_BEITRAG'),
             $gDb,
-            "SELECT usf_id, usf_name
-               FROM " . TBL_USER_FIELDS . "
-              WHERE usf_type IN ('DECIMAL', 'NUMBER', 'TEXT')
-           ORDER BY usf_name",
+            ['query'  => "SELECT usf_id, usf_name FROM " . TBL_USER_FIELDS . "
+                           WHERE usf_type IN ('DECIMAL', 'NUMBER', 'TEXT') ORDER BY usf_name",
+             'params' => []],
             [
                 'defaultValue'                  => $formValues['beitragsanalyse_field_beitrag']['value'],
                 'showContextDependentFirstEntry' => true,
