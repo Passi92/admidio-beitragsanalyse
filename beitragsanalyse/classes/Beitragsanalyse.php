@@ -432,11 +432,12 @@ class Beitragsanalyse extends PluginAbstract
     {
         global $gDb, $gCurrentOrgId;
 
-        $sql = 'SELECT rol_id, rol_name
-                  FROM ' . TBL_ROLES . '
-                 WHERE rol_valid  = 1
-                   AND rol_org_id = ?
-              ORDER BY rol_name';
+        $sql = 'SELECT r.rol_id, r.rol_name
+                  FROM ' . TBL_ROLES . ' r
+                  JOIN ' . TBL_CATEGORIES . ' c ON c.cat_id = r.rol_cat_id
+                 WHERE r.rol_valid  = 1
+                   AND c.cat_org_id = ?
+              ORDER BY r.rol_name';
         $stmt  = $gDb->queryPrepared($sql, [$gCurrentOrgId]);
         $roles = [];
         while ($row = $stmt->fetch()) {
