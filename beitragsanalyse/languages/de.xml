@@ -1,44 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<language>
-    <isocode>de</isocode>
-    <languagePack
-        author="Pascal Christmann"
-        email=""
-        version="1.0.0"
-        admidioVersion="5.0"
-        date="2026-04-14">
-
-        <!-- Plugin meta -->
-        <string id="PLG_BEITRAGSANALYSE_DESCRIPTION">Verteilt Mitgliedsbeiträge anteilig auf die aktiven Sportgruppen (Sparten) und zeigt Summen je Sparte sowie eine Detailansicht je Mitglied an.</string>
-
-        <!-- Main page -->
-        <string id="PLG_BEITRAGSANALYSE_HEADLINE">Beitragsanalyse</string>
-        <string id="PLG_BEITRAGSANALYSE_SUMMARY_TITLE">Beiträge je Sparte</string>
-        <string id="PLG_BEITRAGSANALYSE_DETAIL_TITLE">Detailansicht je Mitglied</string>
-        <string id="PLG_BEITRAGSANALYSE_SPARTE">Sparte</string>
-        <string id="PLG_BEITRAGSANALYSE_TOTAL_FEES">Summe Beiträge (€)</string>
-        <string id="PLG_BEITRAGSANALYSE_SHARE">Anteil (€)</string>
-        <string id="PLG_BEITRAGSANALYSE_FAMILY">Familie</string>
-        <string id="PLG_BEITRAGSANALYSE_NO_SPARTE">Keine Sparte</string>
-        <string id="PLG_BEITRAGSANALYSE_TOTAL">Summe</string>
-        <string id="PLG_BEITRAGSANALYSE_NO_DATA">Keine Daten gefunden. Bitte prüfen Sie die Plugin-Einstellungen.</string>
-        <string id="PLG_BEITRAGSANALYSE_NOT_CONFIGURED">Das Plugin ist noch nicht vollständig konfiguriert. Bitte zuerst unter Einstellungen die Kategorie „Sportgruppen" sowie das Profilfeld „Beitrag" auswählen.</string>
-
-        <!-- Preferences -->
-        <string id="PLG_BEITRAGSANALYSE_ENABLED">Plugin aktiviert</string>
-        <string id="PLG_BEITRAGSANALYSE_ENABLED_DESC">Aktiviert oder deaktiviert das Plugin vollständig.</string>
-
-        <string id="PLG_BEITRAGSANALYSE_ROLES_VIEW_PLUGIN">Sichtbar für folgende Rollen</string>
-        <string id="PLG_BEITRAGSANALYSE_ROLES_VIEW_PLUGIN_DESC">Nur Mitglieder der ausgewählten Rollen können dieses Plugin aufrufen. Wird keine Rolle ausgewählt, haben alle angemeldeten Mitglieder Zugriff.</string>
-
-        <string id="PLG_BEITRAGSANALYSE_CATEGORY_SPARTEN">Kategorie Sportgruppen</string>
-        <string id="PLG_BEITRAGSANALYSE_CATEGORY_SPARTEN_DESC">Wählen Sie die Admidio-Rollenkategorie, deren Rollen als Sportgruppen (Sparten) für die anteilige Beitragsverteilung verwendet werden sollen.</string>
-
-        <string id="PLG_BEITRAGSANALYSE_CATEGORY_FAMILY">Kategorie Familienmitgliedschaften</string>
-        <string id="PLG_BEITRAGSANALYSE_CATEGORY_FAMILY_DESC">Wählen Sie die Kategorie der Familienrollen. Alle Mitglieder einer Familienrolle teilen sich einen gemeinsamen Beitrag, der anteilig aufgeteilt wird. Leer lassen, falls keine Familienmitgliedschaften verwendet werden.</string>
-
-        <string id="PLG_BEITRAGSANALYSE_FIELD_BEITRAG">Profilfeld „Beitrag"</string>
-        <string id="PLG_BEITRAGSANALYSE_FIELD_BEITRAG_DESC">Wählen Sie das Profilfeld, das den Mitgliedsbeitrag als Zahl enthält (z. B. „Beitrag" oder „Jahresbeitrag").</string>
-
-    </languagePack>
-</language>
+<resources>
+    <string name="PLG_BEITRAGSANALYSE_DESCRIPTION">Verteilt Mitgliedsbeiträge anteilig auf die aktiven Sportgruppen (Sparten) und zeigt Summen je Sparte sowie eine Detailansicht je Mitglied an.</string>
+    <string name="PLG_BEITRAGSANALYSE_HEADLINE">Beitragsanalyse</string>
+    <string name="PLG_BEITRAGSANALYSE_SUMMARY_TITLE">Beiträge je Sparte</string>
+    <string name="PLG_BEITRAGSANALYSE_DETAIL_TITLE">Detailansicht je Mitglied</string>
+    <string name="PLG_BEITRAGSANALYSE_SPARTE">Sparte</string>
+    <string name="PLG_BEITRAGSANALYSE_TOTAL_FEES">Summe Beiträge (€)</string>
+    <string name="PLG_BEITRAGSANALYSE_SHARE">Anteil (€)</string>
+    <string name="PLG_BEITRAGSANALYSE_FAMILY">Familie</string>
+    <string name="PLG_BEITRAGSANALYSE_NO_SPARTE">Keine Sparte</string>
+    <string name="PLG_BEITRAGSANALYSE_TOTAL">Summe</string>
+    <string name="PLG_BEITRAGSANALYSE_NO_DATA">Keine Daten gefunden. Bitte prüfen Sie die Plugin-Einstellungen.</string>
+    <string name="PLG_BEITRAGSANALYSE_NOT_CONFIGURED">Das Plugin ist noch nicht vollständig konfiguriert. Bitte zuerst unter Einstellungen die Kategorie „Sportgruppen" sowie das Profilfeld „Beitrag" auswählen.</string>
+    <string name="PLG_BEITRAGSANALYSE_ENABLED">Plugin aktiviert</string>
+    <string name="PLG_BEITRAGSANALYSE_ENABLED_DESC">Aktiviert oder deaktiviert das Plugin vollständig.</string>
+    <string name="PLG_BEITRAGSANALYSE_ROLES_VIEW_PLUGIN">Sichtbar für folgende Rollen</string>
+    <string name="PLG_BEITRAGSANALYSE_ROLES_VIEW_PLUGIN_DESC">Nur Mitglieder der ausgewählten Rollen können dieses Plugin aufrufen. Wird keine Rolle ausgewählt, haben alle angemeldeten Mitglieder Zugriff.</string>
+    <string name="PLG_BEITRAGSANALYSE_CATEGORY_SPARTEN">Kategorie Sportgruppen</string>
+    <string name="PLG_BEITRAGSANALYSE_CATEGORY_SPARTEN_DESC">Wählen Sie die Admidio-Rollenkategorie, deren Rollen als Sportgruppen (Sparten) für die anteilige Beitragsverteilung verwendet werden sollen.</string>
+    <string name="PLG_BEITRAGSANALYSE_CATEGORY_FAMILY">Kategorie Familienmitgliedschaften</string>
+    <string name="PLG_BEITRAGSANALYSE_CATEGORY_FAMILY_DESC">Wählen Sie die Kategorie der Familienrollen. Alle Mitglieder einer Familienrolle teilen sich einen gemeinsamen Beitrag, der anteilig aufgeteilt wird. Leer lassen, falls keine Familienmitgliedschaften verwendet werden.</string>
+    <string name="PLG_BEITRAGSANALYSE_FIELD_BEITRAG">Profilfeld „Beitrag"</string>
+    <string name="PLG_BEITRAGSANALYSE_FIELD_BEITRAG_DESC">Wählen Sie das Profilfeld, das den Mitgliedsbeitrag als Zahl enthält (z. B. „Beitrag" oder „Jahresbeitrag").</string>
+</resources>

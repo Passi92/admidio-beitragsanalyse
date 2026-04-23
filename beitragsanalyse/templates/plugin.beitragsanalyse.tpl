@@ -1,5 +1,14 @@
 <div id="plugin-{$name}" class="admidio-plugin-content">
-    <h3>{$l10n->get('PLG_BEITRAGSANALYSE_HEADLINE')}</h3>
+    <h3>
+        {$l10n->get('PLG_BEITRAGSANALYSE_HEADLINE')}
+        {if $isAdmin}
+            <a href="{$urlAdmidio}/adm_plugins/beitragsanalyse/preferences.php"
+               class="btn btn-sm btn-outline-secondary float-end"
+               title="{$l10n->get('SYS_SETTINGS')}">
+                <i class="bi bi-gear-fill"></i>
+            </a>
+        {/if}
+    </h3>
 
     {* ------------------------------------------------------------------ *}
     {* Info / error state                                                   *}

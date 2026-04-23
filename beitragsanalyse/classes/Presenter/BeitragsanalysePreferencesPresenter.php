@@ -2,25 +2,18 @@
 
 namespace Beitragsanalyse\classes\Presenter;
 
+use Admidio\Infrastructure\Plugins\Overview;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
 
 use Beitragsanalyse\classes\Beitragsanalyse;
-use Smarty\Smarty;
 
 /**
  ***********************************************************************************************
  * BeitragsanalysePreferencesPresenter
  *
- * Builds and returns the HTML of the plugin's settings form.  The form is shown by Admidio's
- * Plugin Manager inside the "Plugins" preferences panel.
- *
- * Settings exposed:
- *   1. Plugin enabled / disabled
- *   2. Roles allowed to see the plugin  (multiselect)
- *   3. Role category = Sportgruppen     (single select from DB)
- *   4. Role category = Familienmitglieder (single select from DB)
- *   5. Profile field = Beitrag          (single select from DB)
+ * Builds the plugin settings form and assigns it to an Overview's Smarty instance.
+ * Render by calling $overview->html('preferences.plugin.beitragsanalyse.tpl') afterwards.
  *
  * @copyright Pascal Christmann
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
@@ -29,43 +22,37 @@ use Smarty\Smarty;
 class BeitragsanalysePreferencesPresenter
 {
     /**
-     * Generates the preferences form HTML and returns it as a string.
+     * Builds the preferences form and assigns all Smarty variables to the given Overview.
+     * Call $overview->html('preferences.plugin.beitragsanalyse.tpl') to render.
      *
-     * @param  Smarty $smarty  Smarty instance provided by the Plugin Manager.
-     * @return string          Rendered HTML of the preferences form.
      * @throws \Exception|\Smarty\Exception
      */
-    public static function createBeitragsanalyseForm(Smarty $smarty): string
+    public static function buildForm(Overview $overview): void
     {
         global $gL10n, $gCurrentSession, $gCurrentOrgId, $gDb;
 
-        $pluginBeitragsanalyse = Beitragsanalyse::getInstance();
-        $formValues            = $pluginBeitragsanalyse::getPluginConfig();
+        $formValues = Beitragsanalyse::getPluginConfig();
+        $smarty     = $overview->createSmartyObject();
 
-        // ---------------------------------------------------------------------
-        // Build the FormPresenter
-        // ---------------------------------------------------------------------
-        $formBeitragsanalyse = new FormPresenter(
+        $templateFile = ADMIDIO_PATH . FOLDER_PLUGINS . '/beitragsanalyse/templates/preferences.plugin.beitragsanalyse.tpl';
+        $actionUrl    = SecurityUtils::encodeUrl(
+            ADMIDIO_URL . FOLDER_PLUGINS . '/beitragsanalyse/preferences.php',
+            ['mode' => 'save']
+        );
+
+        $form = new FormPresenter(
             'adm_preferences_form_beitragsanalyse',
-            $pluginBeitragsanalyse::getPluginPath() . '/templates/preferences.plugin.beitragsanalyse.tpl',
-            SecurityUtils::encodeUrl(
-                ADMIDIO_URL . FOLDER_MODULES . '/preferences.php',
-                ['mode' => 'save', 'panel' => 'beitragsanalyse']
-            ),
+            $templateFile,
+            $actionUrl,
             null,
             ['class' => 'form-preferences']
         );
 
-        // ---------------------------------------------------------------------
         // 1. Plugin enabled
-        // ---------------------------------------------------------------------
-        $formBeitragsanalyse->addSelectBox(
+        $form->addSelectBox(
             'beitragsanalyse_enabled',
             $gL10n->get('PLG_BEITRAGSANALYSE_ENABLED'),
-            [
-                1 => $gL10n->get('SYS_ACTIVATED'),
-                0 => $gL10n->get('SYS_DEACTIVATED'),
-            ],
+            [1 => $gL10n->get('SYS_ACTIVATED'), 0 => $gL10n->get('SYS_DEACTIVATED')],
             [
                 'defaultValue'                  => $formValues['beitragsanalyse_enabled']['value'],
                 'showContextDependentFirstEntry' => false,
@@ -73,26 +60,22 @@ class BeitragsanalysePreferencesPresenter
             ]
         );
 
-        // ---------------------------------------------------------------------
-        // 2. Roles allowed to view the plugin  (multiselect)
-        // ---------------------------------------------------------------------
-        $availableRoles = $pluginBeitragsanalyse::getAvailableRoles();
-        $formBeitragsanalyse->addSelectBox(
+        // 2. Roles allowed to view the plugin (multiselect)
+        $availableRoles = Beitragsanalyse::getAvailableRoles();
+        $form->addSelectBox(
             'beitragsanalyse_roles_view_plugin',
             $gL10n->get('PLG_BEITRAGSANALYSE_ROLES_VIEW_PLUGIN'),
             $availableRoles,
             [
-                'defaultValue'          => $formValues['beitragsanalyse_roles_view_plugin']['value'],
-                'multiselect'           => true,
+                'defaultValue'           => $formValues['beitragsanalyse_roles_view_plugin']['value'],
+                'multiselect'            => true,
                 'maximumSelectionNumber' => count($availableRoles),
-                'helpTextId'            => 'PLG_BEITRAGSANALYSE_ROLES_VIEW_PLUGIN_DESC',
+                'helpTextId'             => 'PLG_BEITRAGSANALYSE_ROLES_VIEW_PLUGIN_DESC',
             ]
         );
 
-        // ---------------------------------------------------------------------
         // 3. Role category for Sportgruppen
-        // ---------------------------------------------------------------------
-        $formBeitragsanalyse->addSelectBoxFromSql(
+        $form->addSelectBoxFromSql(
             'beitragsanalyse_category_sparten',
             $gL10n->get('PLG_BEITRAGSANALYSE_CATEGORY_SPARTEN'),
             $gDb,
@@ -101,7 +84,6 @@ class BeitragsanalysePreferencesPresenter
               WHERE cat_type   = \'ROL\'
                 AND cat_org_id = ' . $gCurrentOrgId . '
            ORDER BY cat_name',
-            [],
             [
                 'defaultValue'                  => $formValues['beitragsanalyse_category_sparten']['value'],
                 'showContextDependentFirstEntry' => true,
@@ -109,10 +91,8 @@ class BeitragsanalysePreferencesPresenter
             ]
         );
 
-        // ---------------------------------------------------------------------
         // 4. Role category for family memberships
-        // ---------------------------------------------------------------------
-        $formBeitragsanalyse->addSelectBoxFromSql(
+        $form->addSelectBoxFromSql(
             'beitragsanalyse_category_family',
             $gL10n->get('PLG_BEITRAGSANALYSE_CATEGORY_FAMILY'),
             $gDb,
@@ -121,19 +101,15 @@ class BeitragsanalysePreferencesPresenter
               WHERE cat_type   = \'ROL\'
                 AND cat_org_id = ' . $gCurrentOrgId . '
            ORDER BY cat_name',
-            [],
             [
                 'defaultValue'                  => $formValues['beitragsanalyse_category_family']['value'],
-                'showContextDependentFirstEntry' => true,   // allows "none / not configured"
+                'showContextDependentFirstEntry' => true,
                 'helpTextId'                    => 'PLG_BEITRAGSANALYSE_CATEGORY_FAMILY_DESC',
             ]
         );
 
-        // ---------------------------------------------------------------------
-        // 5. Profile field that holds the Beitrag amount
-        //    Only show fields of numeric/decimal types to reduce clutter.
-        // ---------------------------------------------------------------------
-        $formBeitragsanalyse->addSelectBoxFromSql(
+        // 5. Profile field holding the fee amount
+        $form->addSelectBoxFromSql(
             'beitragsanalyse_field_beitrag',
             $gL10n->get('PLG_BEITRAGSANALYSE_FIELD_BEITRAG'),
             $gDb,
@@ -141,7 +117,6 @@ class BeitragsanalysePreferencesPresenter
                FROM " . TBL_USER_FIELDS . "
               WHERE usf_type IN ('DECIMAL', 'NUMBER', 'TEXT')
            ORDER BY usf_name",
-            [],
             [
                 'defaultValue'                  => $formValues['beitragsanalyse_field_beitrag']['value'],
                 'showContextDependentFirstEntry' => true,
@@ -149,17 +124,9 @@ class BeitragsanalysePreferencesPresenter
             ]
         );
 
-        // ---------------------------------------------------------------------
-        // Save button
-        // ---------------------------------------------------------------------
-        $formBeitragsanalyse->addSubmitButton(
-            'adm_btn_save',
-            $gL10n->get('SYS_SAVE'),
-            ['icon' => 'bi-check-lg']
-        );
+        $form->addSubmitButton('adm_btn_save', $gL10n->get('SYS_SAVE'), ['icon' => 'bi-check-lg']);
 
-        // Register form with session (CSRF protection) and assign to Smarty
-        $gCurrentSession->addFormObject($formBeitragsanalyse);
-        return $formBeitragsanalyse->addToSmarty($smarty);
+        $gCurrentSession->addFormObject($form);
+        $form->addToSmarty($smarty);
     }
 }

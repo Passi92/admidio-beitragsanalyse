@@ -3,8 +3,6 @@
 namespace Beitragsanalyse\classes;
 
 use Admidio\Infrastructure\Plugins\Overview;
-use Admidio\Infrastructure\Plugins\PluginAbstract;
-use Throwable;
 
 /**
  ***********************************************************************************************
@@ -55,6 +53,7 @@ class Beitragsanalyse extends PluginAbstract
 
         $pluginPath = self::getPluginPath();
         $overview   = new Overview($pluginPath);
+        $overview->assignTemplateVariable('isAdmin', $gCurrentUser->isAdministrator());
 
         // --- Plugin enabled? ---
         $configValues = $this->getPluginConfigValues();
@@ -111,10 +110,11 @@ class Beitragsanalyse extends PluginAbstract
      */
     private function output(Overview $overview, ?object $page): void
     {
+        $template = 'plugin.beitragsanalyse.tpl';
         if ($page !== null) {
-            $page->addHtml($overview->html());
+            $page->addHtml($overview->html($template));
         } else {
-            echo $overview->html();
+            echo $overview->html($template);
         }
     }
 

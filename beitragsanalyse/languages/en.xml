@@ -1,44 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<language>
-    <isocode>en</isocode>
-    <languagePack
-        author="Pascal Christmann"
-        email=""
-        version="1.0.0"
-        admidioVersion="5.0"
-        date="2026-04-14">
-
-        <!-- Plugin meta -->
-        <string id="PLG_BEITRAGSANALYSE_DESCRIPTION">Distributes member fees proportionally across active sport groups (Sparten) and shows totals per group as well as a per-member detail view.</string>
-
-        <!-- Main page -->
-        <string id="PLG_BEITRAGSANALYSE_HEADLINE">Fee Analysis</string>
-        <string id="PLG_BEITRAGSANALYSE_SUMMARY_TITLE">Fees per Sport Group</string>
-        <string id="PLG_BEITRAGSANALYSE_DETAIL_TITLE">Detail View per Member</string>
-        <string id="PLG_BEITRAGSANALYSE_SPARTE">Sport Group</string>
-        <string id="PLG_BEITRAGSANALYSE_TOTAL_FEES">Total Fees (€)</string>
-        <string id="PLG_BEITRAGSANALYSE_SHARE">Share (€)</string>
-        <string id="PLG_BEITRAGSANALYSE_FAMILY">Family</string>
-        <string id="PLG_BEITRAGSANALYSE_NO_SPARTE">No Sport Group</string>
-        <string id="PLG_BEITRAGSANALYSE_TOTAL">Total</string>
-        <string id="PLG_BEITRAGSANALYSE_NO_DATA">No data found. Please check the plugin settings.</string>
-        <string id="PLG_BEITRAGSANALYSE_NOT_CONFIGURED">The plugin is not fully configured yet. Please select the sport group category and the fee profile field in the settings first.</string>
-
-        <!-- Preferences -->
-        <string id="PLG_BEITRAGSANALYSE_ENABLED">Plugin enabled</string>
-        <string id="PLG_BEITRAGSANALYSE_ENABLED_DESC">Enables or disables the plugin entirely.</string>
-
-        <string id="PLG_BEITRAGSANALYSE_ROLES_VIEW_PLUGIN">Visible to roles</string>
-        <string id="PLG_BEITRAGSANALYSE_ROLES_VIEW_PLUGIN_DESC">Only members of the selected roles can access this plugin. If no role is selected, all logged-in members have access.</string>
-
-        <string id="PLG_BEITRAGSANALYSE_CATEGORY_SPARTEN">Sport group category</string>
-        <string id="PLG_BEITRAGSANALYSE_CATEGORY_SPARTEN_DESC">Select the Admidio role category whose roles represent the sport groups used for proportional fee distribution.</string>
-
-        <string id="PLG_BEITRAGSANALYSE_CATEGORY_FAMILY">Family membership category</string>
-        <string id="PLG_BEITRAGSANALYSE_CATEGORY_FAMILY_DESC">Select the category of family roles. All members of a family role share one fee that is split equally. Leave empty if no family memberships are used.</string>
-
-        <string id="PLG_BEITRAGSANALYSE_FIELD_BEITRAG">Fee profile field</string>
-        <string id="PLG_BEITRAGSANALYSE_FIELD_BEITRAG_DESC">Select the profile field that holds the membership fee as a number (e.g. "Beitrag" or "Annual fee").</string>
-
-    </languagePack>
-</language>
+<resources>
+    <string name="PLG_BEITRAGSANALYSE_DESCRIPTION">Distributes member fees proportionally across active sport groups (Sparten) and shows totals per group as well as a per-member detail view.</string>
+    <string name="PLG_BEITRAGSANALYSE_HEADLINE">Fee Analysis</string>
+    <string name="PLG_BEITRAGSANALYSE_SUMMARY_TITLE">Fees per Sport Group</string>
+    <string name="PLG_BEITRAGSANALYSE_DETAIL_TITLE">Detail View per Member</string>
+    <string name="PLG_BEITRAGSANALYSE_SPARTE">Sport Group</string>
+    <string name="PLG_BEITRAGSANALYSE_TOTAL_FEES">Total Fees (€)</string>
+    <string name="PLG_BEITRAGSANALYSE_SHARE">Share (€)</string>
+    <string name="PLG_BEITRAGSANALYSE_FAMILY">Family</string>
+    <string name="PLG_BEITRAGSANALYSE_NO_SPARTE">No Sport Group</string>
+    <string name="PLG_BEITRAGSANALYSE_TOTAL">Total</string>
+    <string name="PLG_BEITRAGSANALYSE_NO_DATA">No data found. Please check the plugin settings.</string>
+    <string name="PLG_BEITRAGSANALYSE_NOT_CONFIGURED">The plugin is not fully configured yet. Please select the sport group category and the fee profile field in the settings first.</string>
+    <string name="PLG_BEITRAGSANALYSE_ENABLED">Plugin enabled</string>
+    <string name="PLG_BEITRAGSANALYSE_ENABLED_DESC">Enables or disables the plugin entirely.</string>
+    <string name="PLG_BEITRAGSANALYSE_ROLES_VIEW_PLUGIN">Visible to roles</string>
+    <string name="PLG_BEITRAGSANALYSE_ROLES_VIEW_PLUGIN_DESC">Only members of the selected roles can access this plugin. If no role is selected, all logged-in members have access.</string>
+    <string name="PLG_BEITRAGSANALYSE_CATEGORY_SPARTEN">Sport group category</string>
+    <string name="PLG_BEITRAGSANALYSE_CATEGORY_SPARTEN_DESC">Select the Admidio role category whose roles represent the sport groups used for proportional fee distribution.</string>
+    <string name="PLG_BEITRAGSANALYSE_CATEGORY_FAMILY">Family membership category</string>
+    <string name="PLG_BEITRAGSANALYSE_CATEGORY_FAMILY_DESC">Select the category of family roles. All members of a family role share one fee that is split equally. Leave empty if no family memberships are used.</string>
+    <string name="PLG_BEITRAGSANALYSE_FIELD_BEITRAG">Fee profile field</string>
+    <string name="PLG_BEITRAGSANALYSE_FIELD_BEITRAG_DESC">Select the profile field that holds the membership fee as a number (e.g. "Beitrag" or "Annual fee").</string>
+</resources>

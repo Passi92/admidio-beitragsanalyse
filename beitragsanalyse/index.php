@@ -1,5 +1,17 @@
 <?php
 
+spl_autoload_register(function ($className) {
+    $prefix = 'Beitragsanalyse\\';
+    $baseDir = __DIR__ . '/';
+    if (strncmp($prefix, $className, strlen($prefix)) !== 0) {
+        return;
+    }
+    $file = $baseDir . str_replace('\\', '/', substr($className, strlen($prefix))) . '.php';
+    if (file_exists($file)) {
+        require $file;
+    }
+});
+
 use Beitragsanalyse\classes\Beitragsanalyse;
 
 /**
@@ -16,6 +28,8 @@ use Beitragsanalyse\classes\Beitragsanalyse;
  */
 try {
     require_once(__DIR__ . '/../../system/common.php');
+
+    $gL10n->addLanguageFolderPath(ADMIDIO_PATH . FOLDER_PLUGINS . '/beitragsanalyse/languages');
 
     $pluginBeitragsanalyse = Beitragsanalyse::getInstance();
     $pluginBeitragsanalyse->doRender(isset($page) ? $page : null);
