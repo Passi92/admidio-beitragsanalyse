@@ -33,7 +33,7 @@ try {
     // Handle save
     // -------------------------------------------------------------------------
     if (isset($_GET['mode']) && $_GET['mode'] === 'save') {
-        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+        $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
 
         $arrayFields = ['beitragsanalyse_roles_view_plugin'];
         $fields      = [
