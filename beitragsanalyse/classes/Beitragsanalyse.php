@@ -226,25 +226,31 @@ class Beitragsanalyse extends PluginAbstract
         $userNames = [];    // userId => ['first' => ..., 'last' => ...]
 
         if (!empty($allUserIds)) {
+            // Resolve field IDs first — MySQL rejects LIMIT in scalar subqueries inside JOIN ON.
+            $firstNameFieldId = 0;
+            $lastNameFieldId  = 0;
+            $sql  = "SELECT usf_id, usf_name_intern FROM " . TBL_USER_FIELDS
+                  . " WHERE usf_name_intern IN ('FIRST_NAME', 'LAST_NAME')";
+            $stmt = $gDb->queryPrepared($sql);
+            while ($row = $stmt->fetch()) {
+                if ($row['usf_name_intern'] === 'FIRST_NAME') {
+                    $firstNameFieldId = (int)$row['usf_id'];
+                } else {
+                    $lastNameFieldId = (int)$row['usf_id'];
+                }
+            }
+
             $placeholders = implode(',', array_fill(0, count($allUserIds), '?'));
-            // Admidio stores first/last name as profile field values with
-            // internal names FIRST_NAME / LAST_NAME in adm_user_fields.
             $sql = 'SELECT u.usr_id,
                            fn.usd_value AS first_name,
                            ln.usd_value AS last_name
                       FROM ' . TBL_USERS . ' u
-                 LEFT JOIN ' . TBL_USER_DATA   . ' fn
+                 LEFT JOIN ' . TBL_USER_DATA . ' fn
                         ON fn.usd_usr_id = u.usr_id
-                       AND fn.usd_usf_id = (
-                               SELECT usf_id FROM ' . TBL_USER_FIELDS . '
-                                WHERE usf_name_intern = \'FIRST_NAME\' LIMIT 1
-                           )
-                 LEFT JOIN ' . TBL_USER_DATA   . ' ln
+                       AND fn.usd_usf_id = ' . $firstNameFieldId . '
+                 LEFT JOIN ' . TBL_USER_DATA . ' ln
                         ON ln.usd_usr_id = u.usr_id
-                       AND ln.usd_usf_id = (
-                               SELECT usf_id FROM ' . TBL_USER_FIELDS . '
-                                WHERE usf_name_intern = \'LAST_NAME\' LIMIT 1
-                           )
+                       AND ln.usd_usf_id = ' . $lastNameFieldId . '
                      WHERE u.usr_id IN (' . $placeholders . ')';
             $stmt = $gDb->queryPrepared($sql, $allUserIds);
             while ($row = $stmt->fetch()) {
@@ -435,8 +441,9 @@ class Beitragsanalyse extends PluginAbstract
         $sql = 'SELECT r.rol_id, r.rol_name
                   FROM ' . TBL_ROLES . ' r
                   JOIN ' . TBL_CATEGORIES . ' c ON c.cat_id = r.rol_cat_id
-                 WHERE r.rol_valid  = 1
-                   AND c.cat_org_id = ?
+                 WHERE r.rol_valid       = 1
+                   AND r.rol_start_date IS NULL
+                   AND c.cat_org_id     = ?
               ORDER BY r.rol_name';
         $stmt  = $gDb->queryPrepared($sql, [$gCurrentOrgId]);
         $roles = [];
