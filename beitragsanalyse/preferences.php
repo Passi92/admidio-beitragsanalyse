@@ -66,6 +66,7 @@ try {
     }
 
     $page = new PagePresenter('adm_plugin_beitragsanalyse_preferences');
+    $page->setInlineMode();
     $page->addHtml($overview->html('preferences.plugin.beitragsanalyse.tpl'));
     $page->show();
 

@@ -142,7 +142,7 @@ class Beitragsanalyse extends PluginAbstract
      */
     private function computeStats(int $spartenCatId, int $familyCatId, int $beitragFieldId): array
     {
-        global $gDb;
+        global $gDb, $gCurrentOrgId;
 
         $today = date('Y-m-d');
 
@@ -200,27 +200,32 @@ class Beitragsanalyse extends PluginAbstract
             }
         }
 
-        // ---- 4. Beitrag values for all relevant users ----------------------------------------
-        $allUserIds = array_unique(
-            array_merge(array_keys($spartenMemberships), array_keys($familyMemberships))
-        );
+        // ---- 4. Beitrag values for all active org members -----------------------------------
+        // Query all members with at least one active role in this org so that members who
+        // pay but are only in a generic "Mitglieder" role (not a Sparte or family role) are
+        // also captured.  They will fall into "Keine Sparte" in the distribution below.
         $beitragValues = [];    // userId => float (only > 0)
-
-        if (!empty($allUserIds)) {
-            $placeholders = implode(',', array_fill(0, count($allUserIds), '?'));
-            $sql = 'SELECT usd_usr_id, usd_value
-                      FROM ' . TBL_USER_DATA . '
-                     WHERE usd_usf_id  = ?
-                       AND usd_usr_id IN (' . $placeholders . ')';
-            $params = array_merge([$beitragFieldId], $allUserIds);
-            $stmt   = $gDb->queryPrepared($sql, $params);
-            while ($row = $stmt->fetch()) {
-                $v = (float)str_replace(',', '.', (string)$row['usd_value']);
-                if ($v > 0.0) {
-                    $beitragValues[(int)$row['usd_usr_id']] = $v;
-                }
+        $sql = 'SELECT DISTINCT ud.usd_usr_id, ud.usd_value
+                  FROM ' . TBL_USER_DATA . ' ud
+                  JOIN ' . TBL_MEMBERS   . ' m ON m.mem_usr_id = ud.usd_usr_id
+                  JOIN ' . TBL_ROLES     . ' r ON r.rol_id     = m.mem_rol_id
+                  JOIN ' . TBL_CATEGORIES . ' c ON c.cat_id    = r.rol_cat_id
+                 WHERE ud.usd_usf_id = ?
+                   AND c.cat_org_id  = ?
+                   AND m.mem_begin  <= ?
+                   AND m.mem_end    >= ?';
+        $stmt = $gDb->queryPrepared($sql, [$beitragFieldId, $gCurrentOrgId, $today, $today]);
+        while ($row = $stmt->fetch()) {
+            $v = (float)str_replace(',', '.', (string)$row['usd_value']);
+            if ($v > 0.0) {
+                $beitragValues[(int)$row['usd_usr_id']] = $v;
             }
         }
+
+        // All users needing name lookups: Sparten members + family members + fee payers.
+        $allUserIds = array_values(array_unique(
+            array_merge(array_keys($spartenMemberships), array_keys($familyMemberships), array_keys($beitragValues))
+        ));
 
         // ---- 5. User names ------------------------------------------------------------------
         $userNames = [];    // userId => ['first' => ..., 'last' => ...]
@@ -333,6 +338,13 @@ class Beitragsanalyse extends PluginAbstract
                         ];
                     }
                 }
+            }
+        }
+
+        // Members with Beitrag but no Sparte role and no family role → Keine Sparte
+        foreach ($beitragValues as $userId => $beitrag) {
+            if (!isset($spartenMemberships[$userId]) && !isset($familyMemberships[$userId])) {
+                $noSparteCost += $beitrag;
             }
         }
 
