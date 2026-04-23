@@ -65,6 +65,8 @@ try {
         $overview->assignTemplateVariable('savedMessage', $gL10n->get('SYS_SAVE_DATA'));
     }
 
+    $gNavigation->addUrl(CURRENT_URL, $gL10n->get('SYS_SETTINGS') . ': ' . $gL10n->get('PLG_BEITRAGSANALYSE_HEADLINE'));
+
     $page = new PagePresenter('adm_plugin_beitragsanalyse_preferences');
     $page->addHtml($overview->html('preferences.plugin.beitragsanalyse.tpl'));
     $page->show();
