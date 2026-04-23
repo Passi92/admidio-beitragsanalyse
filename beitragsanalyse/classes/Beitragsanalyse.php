@@ -207,13 +207,15 @@ class Beitragsanalyse extends PluginAbstract
         $beitragValues = [];    // userId => float (only > 0)
         $sql = 'SELECT DISTINCT ud.usd_usr_id, ud.usd_value
                   FROM ' . TBL_USER_DATA . ' ud
-                  JOIN ' . TBL_MEMBERS   . ' m ON m.mem_usr_id = ud.usd_usr_id
-                  JOIN ' . TBL_ROLES     . ' r ON r.rol_id     = m.mem_rol_id
-                  JOIN ' . TBL_CATEGORIES . ' c ON c.cat_id    = r.rol_cat_id
-                 WHERE ud.usd_usf_id = ?
-                   AND c.cat_org_id  = ?
-                   AND m.mem_begin  <= ?
-                   AND m.mem_end    >= ?';
+                  JOIN ' . TBL_MEMBERS   . ' m ON m.mem_usr_id  = ud.usd_usr_id
+                  JOIN ' . TBL_ROLES     . ' r ON r.rol_id      = m.mem_rol_id
+                  JOIN ' . TBL_CATEGORIES . ' c ON c.cat_id     = r.rol_cat_id
+                 WHERE ud.usd_usf_id       = ?
+                   AND c.cat_org_id        = ?
+                   AND r.rol_valid         = 1
+                   AND r.rol_start_date   IS NULL
+                   AND m.mem_begin        <= ?
+                   AND m.mem_end          >= ?';
         $stmt = $gDb->queryPrepared($sql, [$beitragFieldId, $gCurrentOrgId, $today, $today]);
         while ($row = $stmt->fetch()) {
             $v = (float)str_replace(',', '.', (string)$row['usd_value']);
