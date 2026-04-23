@@ -31,6 +31,10 @@ try {
 
     $gL10n->addLanguageFolderPath(ADMIDIO_PATH . FOLDER_PLUGINS . '/beitragsanalyse/languages');
 
+    if (!isset($page)) {
+        $gNavigation->addStartUrl(CURRENT_URL, $gL10n->get('PLG_BEITRAGSANALYSE_HEADLINE'), 'bi-bar-chart-fill');
+    }
+
     $pluginBeitragsanalyse = Beitragsanalyse::getInstance();
     $pluginBeitragsanalyse->doRender(isset($page) ? $page : null);
 
