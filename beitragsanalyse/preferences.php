@@ -15,6 +15,7 @@ spl_autoload_register(function ($className) {
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Plugins\Overview;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Presenter\PagePresenter;
 use Beitragsanalyse\classes\Beitragsanalyse;
 use Beitragsanalyse\classes\Presenter\BeitragsanalysePreferencesPresenter;
 
@@ -64,7 +65,9 @@ try {
         $overview->assignTemplateVariable('savedMessage', $gL10n->get('SYS_SAVE_DATA'));
     }
 
-    echo $overview->html('preferences.plugin.beitragsanalyse.tpl');
+    $page = new PagePresenter('adm_plugin_beitragsanalyse_preferences');
+    $page->addHtml($overview->html('preferences.plugin.beitragsanalyse.tpl'));
+    $page->show();
 
 } catch (Throwable $e) {
     echo $e->getMessage();

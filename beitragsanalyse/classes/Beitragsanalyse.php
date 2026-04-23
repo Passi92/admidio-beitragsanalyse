@@ -3,6 +3,7 @@
 namespace Beitragsanalyse\classes;
 
 use Admidio\Infrastructure\Plugins\Overview;
+use Admidio\UI\Presenter\PagePresenter;
 
 /**
  ***********************************************************************************************
@@ -110,11 +111,13 @@ class Beitragsanalyse extends PluginAbstract
      */
     private function output(Overview $overview, ?object $page): void
     {
-        $template = 'plugin.beitragsanalyse.tpl';
+        $html = $overview->html('plugin.beitragsanalyse.tpl');
         if ($page !== null) {
-            $page->addHtml($overview->html($template));
+            $page->addHtml($html);
         } else {
-            echo $overview->html($template);
+            $fullPage = new PagePresenter('adm_plugin_beitragsanalyse');
+            $fullPage->addHtml($html);
+            $fullPage->show();
         }
     }
 
