@@ -12,7 +12,10 @@ spl_autoload_register(function ($className) {
     }
 });
 
+use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Beitragsanalyse\classes\Beitragsanalyse;
+use Beitragsanalyse\classes\SnapshotRepository;
 
 /**
  ***********************************************************************************************
@@ -30,6 +33,42 @@ try {
     require_once(__DIR__ . '/../../system/common.php');
 
     $gL10n->addLanguageFolderPath(ADMIDIO_PATH . FOLDER_PLUGINS . '/beitragsanalyse/languages');
+
+    // -------------------------------------------------------------------------
+    // Handle "save snapshot" POST (admin only, CSRF-protected)
+    // -------------------------------------------------------------------------
+    if (isset($_GET['mode']) && $_GET['mode'] === 'save') {
+        require_once(__DIR__ . '/../../system/login_valid.php');
+
+        if (!$gCurrentUser->isAdministrator()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $token = $_POST['adm_csrf_token'] ?? '';
+        if ($token === '' || $token !== $gCurrentSession->getCsrfToken()) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $stats = Beitragsanalyse::getInstance()->getCurrentSummary();
+        if ($stats === null) {
+            throw new Exception('PLG_BEITRAGSANALYSE_NOT_CONFIGURED');
+        }
+
+        $label = isset($_POST['label']) ? (string)$_POST['label'] : '';
+
+        SnapshotRepository::save(
+            $gCurrentOrgId,
+            $gCurrentUser->getValue('usr_id'),
+            $label,
+            $stats['summary'],
+            (float)$stats['total']
+        );
+
+        admRedirect(SecurityUtils::encodeUrl(
+            ADMIDIO_URL . FOLDER_PLUGINS . '/beitragsanalyse/index.php',
+            ['saved' => '1']
+        ));
+    }
 
     if (!isset($page)) {
         $gNavigation->addStartUrl(CURRENT_URL, $gL10n->get('PLG_BEITRAGSANALYSE_HEADLINE'), 'bi-bar-chart-fill');

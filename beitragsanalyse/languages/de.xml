@@ -22,4 +22,15 @@
     <string name="PLG_BEITRAGSANALYSE_CATEGORY_FAMILY_DESC">Wählen Sie die Kategorie der Familienrollen. Alle Mitglieder einer Familienrolle teilen sich einen gemeinsamen Beitrag, der anteilig aufgeteilt wird. Leer lassen, falls keine Familienmitgliedschaften verwendet werden.</string>
     <string name="PLG_BEITRAGSANALYSE_FIELD_BEITRAG">Profilfeld „Beitrag"</string>
     <string name="PLG_BEITRAGSANALYSE_FIELD_BEITRAG_DESC">Wählen Sie das Profilfeld, das den Mitgliedsbeitrag als Zahl enthält (z. B. „Beitrag" oder „Jahresbeitrag").</string>
+    <string name="PLG_BEITRAGSANALYSE_SAVE_SNAPSHOT">Snapshot speichern</string>
+    <string name="PLG_BEITRAGSANALYSE_LABEL">Bezeichnung</string>
+    <string name="PLG_BEITRAGSANALYSE_HISTORY">Verlauf</string>
+    <string name="PLG_BEITRAGSANALYSE_HISTORY_TITLE">Gespeicherte Auswertungen</string>
+    <string name="PLG_BEITRAGSANALYSE_DATE">Datum</string>
+    <string name="PLG_BEITRAGSANALYSE_NO_SNAPSHOTS">Noch keine gespeicherten Auswertungen.</string>
+    <string name="PLG_BEITRAGSANALYSE_SAVED_OK">Snapshot wurde gespeichert.</string>
+    <string name="PLG_BEITRAGSANALYSE_DELETED_OK">Snapshot wurde gelöscht.</string>
+    <string name="PLG_BEITRAGSANALYSE_DELETE_CONFIRM">Snapshot wirklich löschen?</string>
+    <string name="PLG_BEITRAGSANALYSE_SNAPSHOT_HEADLINE">Snapshot vom #VAR1#</string>
+    <string name="PLG_BEITRAGSANALYSE_BACK_TO_ANALYSIS">Zurück zur Beitragsanalyse</string>
 </resources>

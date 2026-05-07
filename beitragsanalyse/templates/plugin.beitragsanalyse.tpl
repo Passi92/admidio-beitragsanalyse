@@ -10,12 +10,37 @@
         {/if}
     </h3>
 
+    {if isset($savedMessage)}<div class="alert alert-success">{$savedMessage}</div>{/if}
+
     {* ------------------------------------------------------------------ *}
     {* Info / error state                                                   *}
     {* ------------------------------------------------------------------ *}
     {if isset($message) && $message != ''}
         <p class="text-muted">{$message}</p>
     {else}
+
+    {* ------------------------------------------------------------------ *}
+    {* Action bar: history link (everyone) + save snapshot (admin only)    *}
+    {* ------------------------------------------------------------------ *}
+    <div class="d-flex flex-wrap gap-2 align-items-end mb-3 mt-2">
+        <a href="{$historyUrl}" class="btn btn-secondary btn-sm">
+            <i class="bi bi-clock-history"></i>
+            {$l10n->get('PLG_BEITRAGSANALYSE_HISTORY')}
+        </a>
+
+        {if $isAdmin}
+            <form method="post" action="{$saveUrl}" class="d-flex gap-2 ms-auto">
+                <input type="hidden" name="adm_csrf_token" value="{$csrfToken}">
+                <input type="text" name="label" class="form-control form-control-sm"
+                       placeholder="{$l10n->get('PLG_BEITRAGSANALYSE_LABEL')}" maxlength="255">
+                <button type="submit" class="btn btn-primary btn-sm">
+                    <i class="bi bi-save"></i>
+                    {$l10n->get('PLG_BEITRAGSANALYSE_SAVE_SNAPSHOT')}
+                </button>
+            </form>
+        {/if}
+    </div>
+
 
     {* ------------------------------------------------------------------ *}
     {* Summary table: one row per Sparte                                   *}

@@ -22,4 +22,15 @@
     <string name="PLG_BEITRAGSANALYSE_CATEGORY_FAMILY_DESC">Select the category of family roles. All members of a family role share one fee that is split equally. Leave empty if no family memberships are used.</string>
     <string name="PLG_BEITRAGSANALYSE_FIELD_BEITRAG">Fee profile field</string>
     <string name="PLG_BEITRAGSANALYSE_FIELD_BEITRAG_DESC">Select the profile field that holds the membership fee as a number (e.g. "Beitrag" or "Annual fee").</string>
+    <string name="PLG_BEITRAGSANALYSE_SAVE_SNAPSHOT">Save snapshot</string>
+    <string name="PLG_BEITRAGSANALYSE_LABEL">Label</string>
+    <string name="PLG_BEITRAGSANALYSE_HISTORY">History</string>
+    <string name="PLG_BEITRAGSANALYSE_HISTORY_TITLE">Saved analyses</string>
+    <string name="PLG_BEITRAGSANALYSE_DATE">Date</string>
+    <string name="PLG_BEITRAGSANALYSE_NO_SNAPSHOTS">No saved analyses yet.</string>
+    <string name="PLG_BEITRAGSANALYSE_SAVED_OK">Snapshot saved.</string>
+    <string name="PLG_BEITRAGSANALYSE_DELETED_OK">Snapshot deleted.</string>
+    <string name="PLG_BEITRAGSANALYSE_DELETE_CONFIRM">Delete snapshot?</string>
+    <string name="PLG_BEITRAGSANALYSE_SNAPSHOT_HEADLINE">Snapshot from #VAR1#</string>
+    <string name="PLG_BEITRAGSANALYSE_BACK_TO_ANALYSIS">Back to fee analysis</string>
 </resources>

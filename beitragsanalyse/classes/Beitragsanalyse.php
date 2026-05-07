@@ -3,6 +3,7 @@
 namespace Beitragsanalyse\classes;
 
 use Admidio\Infrastructure\Plugins\Overview;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\PagePresenter;
 
 /**
@@ -50,11 +51,22 @@ class Beitragsanalyse extends PluginAbstract
      */
     public function doRender(?object $page = null): void
     {
-        global $gValidLogin, $gCurrentUser, $gL10n;
+        global $gValidLogin, $gCurrentUser, $gL10n, $gCurrentSession;
 
         $pluginPath = self::getPluginPath();
         $overview   = new Overview($pluginPath);
         $overview->assignTemplateVariable('isAdmin', $gCurrentUser->isAdministrator());
+        $overview->assignTemplateVariable('csrfToken', $gCurrentSession->getCsrfToken());
+        $overview->assignTemplateVariable('saveUrl', SecurityUtils::encodeUrl(
+            ADMIDIO_URL . FOLDER_PLUGINS . '/beitragsanalyse/index.php',
+            ['mode' => 'save']
+        ));
+        $overview->assignTemplateVariable('historyUrl', SecurityUtils::encodeUrl(
+            ADMIDIO_URL . FOLDER_PLUGINS . '/beitragsanalyse/history.php'
+        ));
+        if (!empty($_GET['saved'])) {
+            $overview->assignTemplateVariable('savedMessage', $gL10n->get('PLG_BEITRAGSANALYSE_SAVED_OK'));
+        }
 
         // --- Plugin enabled? ---
         $configValues = $this->getPluginConfigValues();
@@ -138,7 +150,7 @@ class Beitragsanalyse extends PluginAbstract
      * @param int $spartenCatId   ID of the role category used as "Sportgruppen"
      * @param int $familyCatId    ID of the role category for family memberships (0 = disabled)
      * @param int $beitragFieldId ID of the profile field holding the fee amount
-     * @return array{summary: list<array>, details: list<array>}
+     * @return array{summary: list<array>, details: list<array>, total: float}
      */
     private function computeStats(int $spartenCatId, int $familyCatId, int $beitragFieldId): array
     {
@@ -159,7 +171,7 @@ class Beitragsanalyse extends PluginAbstract
         }
 
         if (empty($spartenRoles)) {
-            return ['summary' => [], 'details' => []];
+            return ['summary' => [], 'details' => [], 'total' => 0.0];
         }
 
         // ---- 2. Active Sparten memberships --------------------------------------------------
@@ -389,7 +401,55 @@ class Beitragsanalyse extends PluginAbstract
             'class'  => 'fw-bold',
         ];
 
-        return ['summary' => $summary, 'details' => $details];
+        return ['summary' => $summary, 'details' => $details, 'total' => $total];
+    }
+
+    /**
+     * Returns the per-Sparte summary plus numeric total for the current org's data,
+     * applying the same access checks doRender() does. Returns null if the plugin is
+     * disabled, the user isn't allowed to view it, or required settings are missing.
+     *
+     * Used by index.php's save handler so a snapshot can only be created when the
+     * caller would actually be able to see the same data on the analysis page.
+     *
+     * @return array{summary: list<array>, total: float}|null
+     */
+    public function getCurrentSummary(): ?array
+    {
+        global $gValidLogin, $gCurrentUser;
+
+        if (!$gValidLogin) {
+            return null;
+        }
+
+        $configValues = $this->getPluginConfigValues();
+
+        if (empty($configValues['beitragsanalyse_enabled'])) {
+            return null;
+        }
+
+        $viewRoles = (array)($configValues['beitragsanalyse_roles_view_plugin'] ?? ['All']);
+        if (!in_array('All', $viewRoles, true) && count($viewRoles) > 0) {
+            $userRoles = $gCurrentUser->getRoleMemberships();
+            if (empty(array_intersect($viewRoles, $userRoles))) {
+                return null;
+            }
+        }
+
+        $spartenCatId   = (int)($configValues['beitragsanalyse_category_sparten'] ?? 0);
+        $familyCatId    = (int)($configValues['beitragsanalyse_category_family']  ?? 0);
+        $beitragFieldId = (int)($configValues['beitragsanalyse_field_beitrag']    ?? 0);
+
+        if ($spartenCatId === 0 || $beitragFieldId === 0) {
+            return null;
+        }
+
+        $stats = $this->computeStats($spartenCatId, $familyCatId, $beitragFieldId);
+
+        return [
+            'summary' => $stats['summary'],
+            'total'   => $stats['total'],
+        ];
     }
 
     // -----------------------------------------------------------------------------------------
